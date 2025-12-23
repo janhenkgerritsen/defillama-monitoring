@@ -2,12 +2,12 @@ export async function getServerSideProps() {
   return {
     props: {
       seo: {
-        title: "Dashboard",
+        title: "Protocols",
       },
     },
   };
 }
 
-export default function Home() {
-  return <h1>Home</h1>;
+export default function Protocols() {
+  return <h1>Protocols</h1>;
 }
