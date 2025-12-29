@@ -6,15 +6,18 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
+  --breakpoint-md2: 56.25rem;
   --color-base: #f7f7f7;
   --color-main: #ffffff;
   --color-accent: #1e68d2;
+  --color-link: #1e68d2;
 }
 
 @layer theme {
   .dark {
     --color-base: #0c0a0b;
     --color-main: #161415;
+    --color-link: #629ff4;
   }
 }
 
@@ -39,6 +42,57 @@
   }
   h6 {
     @apply text-sm font-semibold leading-snug;
+  }
+  a {
+    @apply text-link hover:underline;
+  }
+  table {
+    @apply w-full border-collapse text-left text-sm;
+  }
+
+  thead {
+    @apply border-b border-gray-200;
+  }
+
+  th {
+    @apply px-3 py-2 font-medium text-slate-700;
+  }
+
+  tbody {
+    @apply divide-y divide-gray-200;
+  }
+
+  td {
+    @apply px-3 py-2 text-slate-900;
+  }
+
+  tbody tr:hover {
+    @apply bg-slate-50;
+  }
+
+  /* Dark mode */
+  .dark table {
+    @apply text-white;
+  }
+
+  .dark thead {
+    @apply border-gray-600;
+  }
+
+  .dark th {
+    @apply text-white;
+  }
+
+  .dark tbody {
+    @apply divide-gray-600;
+  }
+
+  .dark td {
+    @apply text-white;
+  }
+
+  .dark tbody tr:hover {
+    @apply bg-white/5;
   }
 }
 
@@ -70,5 +124,110 @@
 
   .form-checkbox {
     @apply rounded;
+  }
+
+  .btn,
+  .btn-primary,
+  .btn-secondary,
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2
+      rounded-md px-3 py-2 text-sm font-medium
+      border border-transparent
+      transition-colors
+      focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2
+      focus:ring-offset-white dark:focus:ring-offset-black
+      disabled:opacity-50 disabled:cursor-not-allowed
+      cursor-pointer;
+  }
+
+  .btn-primary {
+    @apply text-white bg-accent
+      hover:opacity-90 active:opacity-85;
+  }
+
+  .btn-secondary {
+    @apply border-gray-200 bg-white text-slate-900
+      hover:bg-slate-50 active:bg-slate-100
+      dark:border-gray-200 dark:bg-black dark:text-white
+      dark:hover:bg-white/5 dark:active:bg-white/10;
+  }
+
+  .btn-ghost {
+    @apply bg-transparent text-slate-900
+      hover:bg-slate-100 active:bg-slate-200
+      dark:text-white
+      dark:hover:bg-white/5 dark:active:bg-white/10;
+  }
+
+  .btn-sm,
+  .btn-primary.btn-sm,
+  .btn-secondary.btn-sm,
+  .btn-ghost.btn-sm {
+    @apply px-2.5 py-1.5 text-xs;
+  }
+
+  .btn-md,
+  .btn-primary.btn-md,
+  .btn-secondary.btn-md,
+  .btn-ghost.btn-md {
+    @apply px-3 py-2 font-medium;
+  }
+
+  .btn-lg,
+  .btn-primary.btn-lg,
+  .btn-secondary.btn-lg,
+  .btn-ghost.btn-lg {
+    @apply px-4 py-2.5 text-base;
+  }
+
+  .card {
+    @apply rounded-2xl bg-white shadow-sm ring-1 ring-black/5 dark:bg-main dark:ring-white/10;
+  }
+
+  .card-body {
+    @apply p-4;
+  }
+
+  .card-header {
+    @apply px-4 py-3 border-b border-black/5 dark:border-white/10;
+  }
+
+  .scrollbar-x {
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in oklab, var(--color-base) 75%, black)
+      transparent;
+  }
+
+  .scrollbar-x::-webkit-scrollbar {
+    height: 10px;
+  }
+
+  .scrollbar-x::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-x::-webkit-scrollbar-thumb {
+    background-color: color-mix(in oklab, var(--color-base) 75%, black);
+    border-radius: 9999px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+
+  .scrollbar-x::-webkit-scrollbar-thumb:hover {
+    background-color: color-mix(in oklab, var(--color-base) 60%, black);
+  }
+
+  /* Dark mode: meng met wit voor contrast op donkere base */
+  .dark .scrollbar-x {
+    scrollbar-color: color-mix(in oklab, var(--color-base) 65%, white)
+      transparent;
+  }
+
+  .dark .scrollbar-x::-webkit-scrollbar-thumb {
+    background-color: color-mix(in oklab, var(--color-base) 65%, white);
+  }
+
+  .dark .scrollbar-x::-webkit-scrollbar-thumb:hover {
+    background-color: color-mix(in oklab, var(--color-base) 50%, white);
   }
 }

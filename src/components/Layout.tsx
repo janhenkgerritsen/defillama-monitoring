@@ -10,9 +10,11 @@ export type NavigationItem = {
 
 export default function Layout({
   children,
+  heading,
   seo,
 }: {
   children: React.ReactNode;
+  heading: string;
   seo: SEOProps;
 }) {
   const navigationItems: NavigationItem[] = [
@@ -20,14 +22,22 @@ export default function Layout({
     { label: "Protocols", href: "/protocols" },
   ];
 
+  // TODO CARD STYLE, PAGE HEADING STYLE, TABLE WRAPPER FOR HORIZONTAL SCROLLING
   return (
     <>
       <SEO {...seo} />
-      <div className="flex flex-col md:flex-row h-screen">
+      <div className="flex flex-col md:flex-row">
         <DesktopNavigation items={navigationItems} />
         <MobileNavigation items={navigationItems} />
 
-        <main className="flex-1 p-4">{children}</main>
+        <main className="flex-1 min-w-0 p-4 ml-0 md:ml-56">
+          <header className="mt-4 mb-4">
+            <h1 className="text-3xl font-semibold tracking-tight text-base-content">
+              {heading}
+            </h1>
+          </header>
+          {children}
+        </main>
       </div>
     </>
   );

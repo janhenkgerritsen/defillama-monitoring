@@ -67,7 +67,7 @@ export default function MobileNavigation({
       {/* Menu */}
       <div
         className={clsx(
-          "fixed inset-y-0 right-0 flex flex-col p-4 bg-main z-50 shadow-xl",
+          "fixed inset-y-0 right-0 flex flex-col p-4 bg-base z-50 shadow-xl w-56",
           "transform transition-transform duration-300 ease-out",
           {
             "translate-x-0": isOpen,
@@ -105,9 +105,12 @@ export default function MobileNavigation({
                 key={item.href}
                 href={item.href}
                 className={clsx(
-                  "rounded px-2 py-1.5",
-                  { "hover:bg-black/5 dark:hover:bg-white/10": !active },
-                  { "bg-accent text-white hover:": active }
+                  "rounded px-2 py-1.5 text-black dark:text-white",
+                  {
+                    "hover:bg-black/5 dark:hover:bg-white/10 hover:no-underline":
+                      !active,
+                  },
+                  { "bg-accent text-white hover:no-underline": active }
                 )}
               >
                 {item.label}

@@ -13,7 +13,7 @@ export default function DesktopNavigation({
   const router = useRouter();
 
   return (
-    <div className="hidden md:flex flex-col w-64 p-4">
+    <div className="hidden fixed inset-y-0 bg-base md:flex flex-col w-56 p-4">
       <Link href="/">
         <Image
           src="/img/defillama.webp"
@@ -40,9 +40,12 @@ export default function DesktopNavigation({
               key={item.href}
               href={item.href}
               className={clsx(
-                "rounded px-2 py-1.5",
-                { "hover:bg-black/5 dark:hover:bg-white/10": !active },
-                { "bg-accent text-white hover:": active }
+                "rounded px-2 py-1.5 text-black dark:text-white",
+                {
+                  "hover:bg-black/5 dark:hover:bg-white/10 hover:no-underline":
+                    !active,
+                },
+                { "bg-accent text-white hover:no-underline": active }
               )}
             >
               {item.label}
