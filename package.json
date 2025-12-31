@@ -8,6 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "build:job:protocol-urls": "esbuild scripts/check-protocol-urls.ts --platform=node --target=node22 --bundle --outfile=dist/jobs/check-protocol-urls.js",
     "data:protocol-urls": "tsx scripts/check-protocol-urls.ts"
   },
   "dependencies": {
@@ -26,6 +27,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "esbuild": "^0.27.2",
     "eslint": "^9",
     "eslint-config-next": "16.1.0",
     "tailwindcss": "^4",

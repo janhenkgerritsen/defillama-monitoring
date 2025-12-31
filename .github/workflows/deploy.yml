@@ -1,0 +1,79 @@
+name: Deploy Next.js (standalone)
+
+on:
+  push:
+    branches: ["main", "master"]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.26.0
+
+      - name: Install deps
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm run build
+
+      - name: Build job scripts
+        run: pnpm run build:job:protocol-urls
+
+      - name: Create artifact tarball
+        run: |
+          test -d .next || (echo ".next missing" && exit 1)
+          test -d .next/standalone || (echo "standalone output missing; set output: 'standalone' in next.config.js" && exit 1)
+
+          rm -f deploy.tar.gz
+          if [ -d public ]; then
+            tar -czf deploy.tar.gz .next/standalone .next/static public dist
+          else
+            tar -czf deploy.tar.gz .next/standalone .next/static dist
+          fi
+
+      - name: Upload & deploy
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          DEPLOY_SITE: dl.movage.nl
+          DEPLOY_SITE_DIR: /home/forge/dl.movage.nl
+          DEPLOY_SYSTEMD_SERVICE: next-dl.movage.nl.service
+          DEPLOY_HEALTH_CHECK_URL: http://127.0.0.1:3000/api/health
+        run: |
+          RELEASE_ID="${GITHUB_SHA::12}"
+
+          mkdir -p ~/.ssh
+          echo "$DEPLOY_SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+
+          ssh-keyscan -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts
+
+          # Upload tarball
+          scp -i ~/.ssh/id_ed25519 deploy.tar.gz "$DEPLOY_USER@$DEPLOY_HOST:/home/forge/$DEPLOY_SITE/deployments/deploy-$RELEASE_ID.tar.gz"
+
+          # Upload deploy script from repo
+          scp -i ~/.ssh/id_ed25519 .deploy/deploy.sh "$DEPLOY_USER@$DEPLOY_HOST:/home/forge/$DEPLOY_SITE/deployments/deploy.sh"
+
+          # Execute remote deploy
+          ssh -i ~/.ssh/id_ed25519 "$DEPLOY_USER@$DEPLOY_HOST" "
+            chmod 755 /home/forge/$DEPLOY_SITE/deployments/deploy.sh &&
+            /home/forge/$DEPLOY_SITE/deployments/deploy.sh \
+              $RELEASE_ID \
+              /home/forge/$DEPLOY_SITE/deployments/deploy-$RELEASE_ID.tar.gz \
+              $DEPLOY_SITE_DIR \
+              $DEPLOY_SYSTEMD_SERVICE \
+              $DEPLOY_HEALTH_CHECK_URL
+          "
