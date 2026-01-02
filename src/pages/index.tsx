@@ -69,7 +69,7 @@ export default function Home({
           Protocol URLs
           <Link
             className="text-sm font-medium text-primary hover:underline"
-            href="/protocols"
+            href="/protocol-urls"
           >
             Details
           </Link>

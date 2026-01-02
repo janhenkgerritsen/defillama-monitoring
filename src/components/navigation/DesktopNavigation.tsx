@@ -53,7 +53,6 @@ export default function DesktopNavigation({
           );
         })}
       </nav>
-
       <div className="mt-auto">
         <ThemeSwitcher />
       </div>

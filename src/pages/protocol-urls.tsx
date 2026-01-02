@@ -17,9 +17,9 @@ import useUrlTableState from "@/hooks/url-table-state";
 export async function getStaticProps() {
   return {
     props: {
-      heading: "Protocols",
+      heading: "Protocol URLs",
       seo: {
-        title: "Protocols",
+        title: "Protocol URLs",
       },
     },
   };
@@ -171,7 +171,6 @@ export default function Protocols() {
   return (
     <>
       <div className="card">
-        <div className="card-header">Protocol URLs</div>
         <div className="card-body">
           <Table
             columns={columns}
